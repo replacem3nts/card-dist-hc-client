@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
 import { fetchLogin } from '../services/Utils'
 import { connect } from 'react-redux'
-import { setCbo } from '../features/cbo/cboSlice'
-import { setPrescribers } from '../features/prescribers/PrescribersSlice'
-import { useHistory } from 'react-router-dom'
+import { setHc } from '../features/hc/HcSlice'
 import { setPrescriptions } from '../features/prescriptions/PrescriptionsSlice'
+import { useHistory } from 'react-router-dom'
 
-const mapDispatch = { setCbo, setPrescribers, setPrescriptions }
+const mapDispatch = { setHc, setPrescriptions }
 
 
-const LoginForm = ({ setCbo, setPrescribers, setPrescriptions }) => {
+const LoginForm = ({ setHc, setPrescriptions }) => {
     let [username, setUsername] = useState('')
     let [password, setPassword] = useState('')
     let history = useHistory()
@@ -20,11 +19,10 @@ const LoginForm = ({ setCbo, setPrescribers, setPrescriptions }) => {
         let userInfo = {username, password}
         fetchLogin(userInfo)
             .then(response => {
-                let {id, name} = response.cbo
+                let {id, name} = response.hc
                 let {token} = response
-                setCbo({id, name, token})
-                setPrescribers(response.cbo)
-                setPrescriptions(response.cbo)
+                setHc({id, name, token})
+                setPrescriptions(response.hc)
                 history.push('/')
             })
     }

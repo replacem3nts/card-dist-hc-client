@@ -5,17 +5,17 @@ import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { removeCbo } from '../features/cbo/cboSlice';
+import { removeHc } from '../features/hc/HcSlice';
 
 let mapState = (state) => {
     return {
-        cboName: state.cbo.name
+        hcName: state.hc.name
     }
 }
 
-let mapDispatch = { removeCbo }
+let mapDispatch = { removeHc }
 
-const SiteHeader = ({ cboName, removeCbo }) => {
+const SiteHeader = ({ hcName, removeHc }) => {
     const [eng, setEng] = useState(false)
     const history = useHistory()
     const { t } = useTranslation()
@@ -31,7 +31,7 @@ const SiteHeader = ({ cboName, removeCbo }) => {
 
     const handleLogout = (e) => {
         e.preventDefault()
-        removeCbo()
+        removeHc()
         history.push('/')
     }
 
@@ -39,7 +39,7 @@ const SiteHeader = ({ cboName, removeCbo }) => {
         <div>
             <img src={logo} className="App-logo" alt="logo" onClick={() => {history.push('/')}}/>
             {localStorage.token ?
-            <h3>{cboName}</h3>
+            <h3>{hcName}</h3>
             :
             <h3>{t('Welcome!')}</h3>
             }
