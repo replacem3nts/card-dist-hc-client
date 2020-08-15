@@ -133,7 +133,6 @@ tr:nth-child(even) {
 }
 
 .filled {
-  height: 35vh;
   overflow: scroll;
 }
 

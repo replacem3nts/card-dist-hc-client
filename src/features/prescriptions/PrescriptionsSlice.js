@@ -5,13 +5,11 @@ const prescriptionsSlice = createSlice({
     initialState: [],
     reducers: {
         setPrescriptions(state, action) {
-            console.log(action.payload)
             const { rxes } = action.payload
             state.push(...rxes)
         },
         updatePrescription(state, action) {
             const { rx } = action.payload
-            console.log(rx)
             let toUpdateInd = state.findIndex(presc => presc.id === rx.id)
             state.splice(toUpdateInd, 1, rx)
         }

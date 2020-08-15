@@ -22,7 +22,6 @@ class App extends Component {
 
 
   handleResponse = (response) => {
-    console.log(response)
     if(!response.message) {
       let {id, name} = response.hc
       let {token} = response

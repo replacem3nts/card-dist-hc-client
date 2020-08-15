@@ -1,14 +1,22 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Prescription } from './Prescription'
+import DateTimePicker from 'react-datetime-picker'
+import { fetchRxUpdate } from '../../services/Utils'
+import { updatePrescription } from './PrescriptionsSlice'
 
 let mapState = (state) => {
     return {prescriptions: state.prescriptions}
 }
 
-const PrescriptionsList = ({ prescriptions }) => {
+let mapDispatch = { updatePrescription }
+
+const PrescriptionsList = ({ prescriptions, updatePrescription }) => {
     const [editRx, setEditRx] = useState(false)
     const [rxToEdit, setRxToEdit] = useState({})
+    const [apptDate, setApptDate] = useState('')
+    const [cardserial, setCardserial] = useState('')
+    const [pickedUp, setPickedUp] = useState('')
 
     let handleEdit = (id) => {
         if(!editRx || rxToEdit.id !== id) {
@@ -21,12 +29,30 @@ const PrescriptionsList = ({ prescriptions }) => {
     let setupEdit = (id) => {
         let rx = prescriptions.find(presc => presc.id === id)
         setRxToEdit(rx)
+        if(rx.appt){setApptDate(new Date(rx.appt))}
+        setCardserial(rx.cardserial)
+        setPickedUp(rx.pickedup)
         setEditRx(true)
     }
 
     let clearEdit = () => {
         setEditRx(false)
         setRxToEdit({})
+        setApptDate('')
+        setCardserial('')
+        setPickedUp('')
+    }
+
+    let handleSubmit = (e) => {
+        e.preventDefault()
+        let rx = {cardserial: cardserial, pickedup: pickedUp, appt: apptDate}
+        fetchRxUpdate(rxToEdit.id, rx, localStorage.token)
+            .then(response => {
+                if(!response.message) {
+                    updatePrescription(response)
+                    clearEdit()
+                }
+            })
     }
     
     const rxArr = prescriptions.map(rx => {
@@ -35,7 +61,7 @@ const PrescriptionsList = ({ prescriptions }) => {
 
     return (
         <>
-        <section className='display-container filled'>
+        <section className='display-container filled' style={editRx ? {height: 35+'vh'} : {height: 75+'vh'}}>
             <header className='filled-header'>
                 <h2>Filled Prescriptions</h2>
                 <div>
@@ -73,14 +99,30 @@ const PrescriptionsList = ({ prescriptions }) => {
                     <div className='rx-detail' style={{width: 80+'%'}}>
                         <label>Notes: <br/><br/><span>{rxToEdit.notes ? rxToEdit.notes : '-'}</span></label>
                     </div>
-                    <div className='rx-detail'>
-                        <form>
+                    <form onSubmit={(e) => handleSubmit(e)}>
+                        <div className='rx-detail'>
                             <label>
                                 Card Serial Number:
-                                {/* <input type='text' value={rxToEdit.cardserial} onChange={(e) => setRxToEdit(rxToEdit => {...rxToEdit, cardserial: e.target.value})}/> */}
+                                <input type='text' value={cardserial} onChange={(e) => setCardserial(e.target.value)}/>
                             </label>
-                        </form>
-                    </div>
+                            <label>
+                                Appointment:  
+                                    <DateTimePicker
+                                        onChange={setApptDate}
+                                        value={apptDate}
+                                        disableClock={true}
+                                    />
+                            </label>
+                            <label>
+                                Picked Up:
+                                <select value={pickedUp} onChange={(e) => setPickedUp(e.target.value)}>
+                                    <option value={true}>Yes</option>
+                                    <option value={false}>No</option>
+                                </select>
+                            </label>
+                        </div>
+                        <input type='submit' value='Save' className='small-button'/>
+                    </form>
                 </section>
         :
             null
@@ -89,4 +131,4 @@ const PrescriptionsList = ({ prescriptions }) => {
     )
 }
 
-export default connect(mapState)(PrescriptionsList)
+export default connect(mapState, mapDispatch)(PrescriptionsList)
