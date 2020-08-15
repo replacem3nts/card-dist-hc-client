@@ -22,7 +22,7 @@ export const Prescription = ({ id, rxcode, cboname, clienttel, language, prescri
             <td>{prescribername}</td>
             <td>${amount}</td>
             <td>{appointment}</td>
-            <td>{cardserial ? cardserial : '-'}</td>
+            <td>{cardserial}</td>
             <td>{pickedup ? t('yes') : t('no')}</td>
             <td>{loaded ? t('yes') : t('no')}</td>
         </tr>

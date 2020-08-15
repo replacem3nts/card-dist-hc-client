@@ -4,6 +4,7 @@ import { Prescription } from './Prescription'
 import DateTimePicker from 'react-datetime-picker'
 import { fetchRxUpdate } from '../../services/Utils'
 import { updatePrescription } from './PrescriptionsSlice'
+import { Link } from 'react-router-dom'
 
 let mapState = (state) => {
     return {prescriptions: state.prescriptions}
@@ -55,13 +56,17 @@ const PrescriptionsList = ({ prescriptions, updatePrescription }) => {
             })
     }
     
-    const rxArr = prescriptions.map(rx => {
+    const unloadedRxs = prescriptions.filter(rx => rx.loaded === false)
+    const rxArr = unloadedRxs.map(rx => {
         return <Prescription key={rx.id} {...rx} edit={handleEdit}/>
     })
 
     return (
         <>
-        <section className='display-container filled' style={editRx ? {height: 35+'vh'} : {height: 75+'vh'}}>
+        <section className='button-break'>
+            <Link to='/' className='small-button'>Back</Link>
+        </section>
+        <section className='display-container filled' style={editRx ? {height: 30+'vh'} : {height: 70+'vh'}}>
             <header className='filled-header'>
                 <h2>Filled Prescriptions</h2>
                 <div>
