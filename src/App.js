@@ -8,6 +8,7 @@ import { fetchPersistLogin } from './services/Utils';
 import LoginForm from './components/LoginForm';
 import { setHc } from './features/hc/HcSlice';
 import { setPrescriptions } from './features/prescriptions/PrescriptionsSlice';
+import CompletedRxList from './features/prescriptions/CompletedRxList';
 
 class App extends Component {
 
@@ -40,6 +41,14 @@ class App extends Component {
     }
   }
 
+  renderCompleted = () => {
+    if(localStorage.token) {
+      return <CompletedRxList/>
+    } else {
+      return <LoginForm/>
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -50,6 +59,7 @@ class App extends Component {
         <main className="App-main">
           <Switch>
             <Route path='/' exact render={this.renderHome}/>
+            <Route path='/completed' exact render={this.renderCompleted}/>
           </Switch>
         </main>
       </div>
