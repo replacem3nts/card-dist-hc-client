@@ -83,6 +83,11 @@ const PrescriptionsList = ({ prescriptions, updatePrescription }) => {
                         <label>Client Telephone: <span>{rxToEdit.clienttel}</span></label>
                         <label>Language: <span>{rxToEdit.language}</span></label>
                     </div>
+                    <div className='rx-detail'>
+                        <label>Prescriber: <span>{rxToEdit.prescribername}</span></label>
+                        <label>Telephone: <span>{rxToEdit.prescriberphone}</span></label>
+                        <label>Email: <span>{rxToEdit.prescriberemail}</span></label>
+                    </div>
                     <div className='rx-detail' style={{width: 80+'%'}}>
                         <label>Notes: <br/><br/><span>{rxToEdit.notes}</span></label>
                     </div>

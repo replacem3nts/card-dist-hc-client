@@ -58,6 +58,7 @@ tr:nth-child(even) {
 
 .App-logo {
   width: 30%;
+  max-height: 12vh;
 }
 
 .App-header {
